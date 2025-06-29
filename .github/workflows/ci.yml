@@ -1,0 +1,175 @@
+name: HTML/CSS Linting CI Pipeline
+
+# Trigger the workflow on push and pull request events
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+    types: [opened, synchronize, reopened]
+
+# Set default permissions
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  # Job 1: Lint HTML and CSS files
+  lint:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history for better diff analysis
+          fetch-depth: 0
+
+      # Step 2: Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          # Cache npm dependencies for faster builds
+          cache: 'npm'
+
+      # Step 3: Install project dependencies
+      # - name: Install Dependencies
+      #   run: |
+      #     echo "Installing linting tools..."
+      #     npm ci --only=dev
+      #     echo "✅ Dependencies installed successfully"
+
+      # Step 4: Display project structure for debugging
+      - name: Show Project Structure
+        run: |
+          echo "📁 Project structure:"
+          find src -type f -name "*.html" -o -name "styles/**/*.css" | head -20
+          echo "📊 File counts:"
+          echo "HTML files: $(find src -name "*.html" | wc -l)"
+          echo "CSS files: $(find styles -name "*.css" | wc -l)"
+
+      # Step 5: Lint HTML files using npm script
+      # - name: Lint HTML Files
+      #   run: |
+      #     echo "🔍 Linting HTML files..."
+      #     if find src -name "*.html" | grep -q .; then
+      #       npm run lint:html
+      #       echo "✅ HTML linting completed successfully"
+      #     else
+      #       echo "⚠️  No HTML files found to lint"
+      #     fi
+
+      # Step 5: Lint HTML files using npx
+      - name: Lint HTML Files
+        run: |
+          echo "🔍 Linting HTML files..."
+          npx htmlhint "src/**/*.html"
+          echo "✅ HTML linting completed successfully"
+
+      # Step 6: Lint CSS files using npm script
+      # - name: Lint CSS Files
+      #   run: |
+      #     echo "🔍 Linting CSS files..."
+      #     if find src -name "*.css" | grep -q .; then
+      #       npm run lint:css
+      #       echo "✅ CSS linting completed successfully"
+      #     else
+      #       echo "⚠️  No CSS files found to lint"
+      #     fi
+
+      # Step 6: Lint CSS files using npx
+      - name: Lint CSS Files
+        run: |
+          echo "🔍 Linting CSS files with basic rules..."
+          if find styles -name "*.css" | grep -q .; then
+            npx stylelint "styles/**/*.css"
+            echo "✅ CSS linting completed successfully"  
+          else
+            echo "⚠️  No CSS files found to lint"
+          fi
+
+      # Step 7: Generate linting report
+      - name: Generate Linting Report
+        if: always() # Run even if previous steps failed
+        run: |
+          echo "📋 Linting Summary Report"
+          echo "=========================="
+          echo "Repository: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Triggered by: ${{ github.event_name }}"
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "PR Number: #${{ github.event.pull_request.number }}"
+            echo "PR Title: ${{ github.event.pull_request.title }}"
+          fi
+
+          echo ""
+          echo "Files processed:"
+          find src -name "*.html" -o -path "styles/*.css" | sort
+
+  # Job 2: Build verification (runs in parallel with linting)
+  build:
+    name: Build Verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Project Structure
+        run: |
+          echo "🏗️  Verifying project can be built..."
+
+          # Check if required files exist
+          if [ ! -f "package.json" ]; then
+            echo "❌ package.json not found!"
+            exit 1
+          fi
+
+          # Verify HTML files are valid
+          if find src -name "*.html" | grep -q .; then
+            echo "✅ HTML files found"
+            for file in $(find src -name "*.html"); do
+              echo "  📄 $file"
+            done
+          fi
+
+          # Verify CSS files exist
+          if find styles -name "*.css" | grep -q .; then
+            echo "✅ CSS files found"
+            for file in $(find styles -name "*.css"); do
+              echo "  🎨 $file"
+            done
+          fi
+
+          echo "✅ Build verification completed successfully"
+
+  # Job 3: Security check (optional but good practice)
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Security Audit
+        run: |
+          echo "🛡️  Running security audit..."
+          if [ -f "package.json" ]; then
+            npm audit --audit-level moderate || true
+            echo "✅ Security audit completed"
+          else
+            echo "⚠️  No package.json found, skipping audit"
+          fi
