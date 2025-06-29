@@ -1,0 +1,155 @@
+/* Hero section */
+.hero-section {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: #fff;
+	padding: 4rem 0;
+	text-align: center;
+}
+
+.hero-title {
+	font-size: 3rem;
+	font-weight: 700;
+	margin-bottom: 1rem;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-description {
+	font-size: 1.25rem;
+	margin-bottom: 2rem;
+	opacity: 0.9;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.hero-actions {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.hero-actions .btn {
+	min-width: 150px;
+}
+
+.hero-actions .btn-primary {
+	background-color: #fff;
+	color: #667eea;
+	border-color: #fff;
+}
+
+.hero-actions .btn-primary:hover {
+	background-color: rgba(255, 255, 255, 0.9);
+	color: #667eea;
+}
+
+.hero-actions .btn-secondary {
+	background-color: transparent;
+	color: #fff;
+	border-color: #fff;
+}
+
+.hero-actions .btn-secondary:hover {
+	background-color: #fff;
+	color: #667eea;
+}
+
+/* Features section */
+.features-section {
+	padding: 4rem 0;
+	background-color: #f8f9fa;
+}
+
+.section-title {
+	text-align: center;
+	margin-bottom: 3rem;
+	color: #333;
+}
+
+.features-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 2rem;
+	margin-top: 2rem;
+}
+
+.feature-card {
+	background: #fff;
+	padding: 2rem;
+	border-radius: 12px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+	display: block;
+}
+
+.feature-title {
+	color: #333;
+	margin-bottom: 1rem;
+	font-size: 1.25rem;
+}
+
+.feature-description {
+	color: #666;
+	line-height: 1.6;
+	margin: 0;
+}
+
+/* Responsive design for home page */
+@media (max-width: 768px) {
+	.hero-title {
+		font-size: 2.5rem;
+	}
+
+	.hero-description {
+		font-size: 1.1rem;
+	}
+
+	.hero-actions {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.hero-actions .btn {
+		width: 100%;
+		max-width: 300px;
+	}
+
+	.features-grid {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+	}
+
+	.feature-card {
+		padding: 1.5rem;
+	}
+
+	.features-section {
+		padding: 3rem 0;
+	}
+}
+
+@media (max-width: 480px) {
+	.hero-section {
+		padding: 3rem 0;
+	}
+
+	.hero-title {
+		font-size: 2rem;
+	}
+
+	.hero-description {
+		font-size: 1rem;
+	}
+}
