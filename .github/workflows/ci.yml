@@ -85,7 +85,7 @@ jobs:
       - name: Lint CSS Files
         run: |
           echo "🔍 Linting CSS files..."
-          npx --package stylelint --package stylelint-config-standard -- stylelint "src/**/*.css"
+          npx stylelint "styles/**/*.css"
           echo "✅ CSS linting completed successfully"
 
       # Step 7: Generate linting report
