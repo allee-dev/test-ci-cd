@@ -47,10 +47,10 @@ jobs:
       - name: Show Project Structure
         run: |
           echo "📁 Project structure:"
-          find src -type f -name "*.html" -o -name "*.css" | head -20
+          find src -type f -name "*.html" -o -name "styles/**/*.css" | head -20
           echo "📊 File counts:"
           echo "HTML files: $(find src -name "*.html" | wc -l)"
-          echo "CSS files: $(find src -name "*.css" | wc -l)"
+          echo "CSS files: $(find styles -name "*.css" | wc -l)"
 
       # Step 5: Lint HTML files using npm script
       # - name: Lint HTML Files
@@ -85,7 +85,7 @@ jobs:
       - name: Lint CSS Files
         run: |
           echo "🔍 Linting CSS files..."
-          npx stylelint "styles/**/*.css"
+          npx --package stylelint --package stylelint-config-standard -- stylelint "src/**/*.css"
           echo "✅ CSS linting completed successfully"
 
       # Step 7: Generate linting report
@@ -106,7 +106,7 @@ jobs:
 
           echo ""
           echo "Files processed:"
-          find src -name "*.html" -o styles -name "*.css" | sort
+          find src -name "*.html" -o -path "styles/*.css" | sort
 
   # Job 2: Build verification (runs in parallel with linting)
   build:
