@@ -84,9 +84,13 @@ jobs:
       # Step 6: Lint CSS files using npx
       - name: Lint CSS Files
         run: |
-          echo "🔍 Linting CSS files..."
-          npx stylelint "styles/**/*.css"
-          echo "✅ CSS linting completed successfully"
+          echo "🔍 Linting CSS files with basic rules..."
+          if find styles -name "*.css" | grep -q .; then
+            npx stylelint "styles/**/*.css"
+            echo "✅ CSS linting completed successfully"  
+          else
+            echo "⚠️  No CSS files found to lint"
+          fi
 
       # Step 7: Generate linting report
       - name: Generate Linting Report
