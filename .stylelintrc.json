@@ -1,21 +1,11 @@
 {
 	"rules": {
 		"no-duplicate-selectors": true,
-		"color-hex-case": "lower",
 		"color-hex-length": "short",
 		"color-named": "never",
-		"selector-combinator-space-after": "always",
 		"selector-attribute-quotes": "always",
-		"declaration-block-trailing-semicolon": "always",
-		"declaration-colon-space-before": "never",
-		"declaration-colon-space-after": "always",
-		"number-leading-zero": "always",
 		"function-url-quotes": "always",
 		"comment-whitespace-inside": "always",
-		"selector-pseudo-element-colon-notation": "double",
-		"selector-pseudo-class-parentheses-space-inside": "never",
-		"media-feature-parentheses-space-inside": "never",
-		"media-feature-colon-space-before": "never",
-		"media-feature-colon-space-after": "always"
+		"selector-pseudo-element-colon-notation": "double"
 	}
 }
